@@ -1,6 +1,7 @@
 <?php
 ob_start();
 require_once 'util.php';
+require_once 'Nota.php';
 ?>
 <!DOCTYPE html>
 <!--
@@ -17,7 +18,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
     <body>
 
         <div class="container-fluid">
-            <h1>Introduzca textos en la sesión</h1>
+            <h1>Introduzca notas en la sesión</h1>
             <?php
             iniciarSesion();
 
@@ -25,17 +26,20 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                 cerrarSesion();
             }
 
-            if (isset($_POST["texto"])) {
-                $texto = $_POST["texto"];
-                $_SESSION["textos"][] = $texto;
+            if (isset($_POST["titulo"]) && isset($_POST["desc"])) {
+                $titulo = $_POST["titulo"];
+                $desc = $_POST["desc"];
+                $nota = new Nota($titulo, $desc);
+                $_SESSION["notas"][] = $nota;
 
-                print_r($_SESSION["textos"]);
+                print_r($_SESSION["notas"]);
+               
             }
 
-            if (isset($_SESSION["textos"]) && count($_SESSION["textos"]) > 0) {
+            if (isset($_SESSION["notas"]) && count($_SESSION["notas"]) > 0) {
                 ?>
                 <ul>
-                    <?php foreach ($_SESSION["textos"] as $key => $value) { ?>
+                    <?php foreach ($_SESSION["notas"] as $key => $value) { ?>
                         <li> <?= $value ?> </li>
                     <?php } ?>
 
@@ -46,13 +50,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
             <div class="row justify-content-center">
                 <div class="col-sm-12 col-md-6">
                     <form method="post">
-                        <!-- Email input -->
+                        <!-- Titulo input -->
                         <div class="form-group mb-4 ">
-                            <label class="form-label" for="texto">Texto</label>
-                            <input type="text" id="texto" class="form-control" name="texto"  required/>
+                            <label class="form-label" for="texto">Título:</label>
+                            <input type="text" id="texto" class="form-control" name="titulo"  required/>
 
                         </div>                    
+                        <div class="form-group mb-4 ">
+                            <label class="form-label" for="desc">Descripción:</label>
+                            <input type="text" id="desc" class="form-control" name="desc"  required/>
 
+                        </div> 
 
                         <!-- Submit button -->
                         <input type="submit" class="btn btn-primary btn-block mb-4" value="Añadir"></button>
